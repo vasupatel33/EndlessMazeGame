@@ -127,7 +127,6 @@
 //}
 using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
 using UnityEngine.UI;
 
 public class PlayerLogic : MonoBehaviour
@@ -173,64 +172,60 @@ public class PlayerLogic : MonoBehaviour
     private bool isSwiping = false;
     private float swipeThreshold = 50f;
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            // Record the starting position when the touch (or mouse button) begins
-            startPos = Input.mousePosition;
-            isSwiping = true;
-        }
+
         if (Input.GetMouseButtonUp(0))
         {
             isSwiping = false;
         }
+    }
+    void FixedUpdate()
+    {
         rb.transform.position = new Vector3(rb.transform.position.x, rb.transform.position.y, rb.transform.position.z + speed);
-        // Check if the mouse is over a UI element
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            startPos = Input.mousePosition;
+            isSwiping = true;
+        }
+
         if (EventSystem.current.IsPointerOverGameObject())
         {
             // The mouse is over a UI element, don't execute movement code
             speed = initialSpeed;
             return;
         }
-        if (Input.GetMouseButton(0))
+
+        if (isSwiping)
         {
+            // Handle swipe logic
+            float deltaY = Input.mousePosition.y - startPos.y;
+            if (deltaY > swipeThreshold)
+            {
+                speed += 0.02f;
+                Debug.Log("Swipe up");
+            }
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            // Handle left or right click logic
             Vector3 mousePosition = Input.mousePosition;
             float screenWidth = Screen.width;
             float screenCenter = screenWidth / 2f;
             bool isLeftSide = mousePosition.x < screenCenter;
 
-            float deltaY = Input.mousePosition.y - startPos.y;
-            if (isSwiping && deltaY > swipeThreshold)
+            if (isLeftSide)
             {
-                //Debug.Log("22");
-                // Calculate the distance moved in the y-axis
-
-                // Check if the swipe is in the up direction
-                //if (deltaY > swipeThreshold)
-                //{
-                speed += 0.03f;
-                Debug.Log("Swipe up");
-                //}
-            }
-            else if (isLeftSide)
-            {
-                // Left side of the screen
                 Debug.Log("Left");
                 targetPosition = new Vector3(rb.transform.position.x - (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
             }
-            else if (!isLeftSide)
-            {
-                Debug.Log("Right");
-                // Right side of the screen
-                targetPosition = new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
-            }
             else
             {
-                Debug.Log("C");
+                Debug.Log("Right");
+                targetPosition = new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
             }
 
-            // Smoothly move towards the targetPosition
             rb.transform.position = Vector3.SmoothDamp(rb.transform.position, targetPosition, ref velocity, smoothTime, Mathf.Infinity, Time.deltaTime);
         }
         else
@@ -240,26 +235,26 @@ public class PlayerLogic : MonoBehaviour
             combo.enabled = false;
         }
     }
-    public void Jump()
+        public void Jump()
     {
         Debug.Log("Jumped");
-        rb.AddForce(Vector3.up * 1000);
+        rb.AddForce(Vector3.up * 1000,ForceMode.Force);
     }
 
-    //void OnTriggerEnter(Collider col)
-    //{
-    //    Debug.Log("Trigger");
-    //    scoreSound.pitch = 0.9f + (float)Vars.combo / 10;
-    //    scoreSound.Play();
-    //    Vars.score += Vars.combo;
-    //    score.text = "SCORE: " + Vars.score;
-    //    combo.text = "+" + Vars.combo;
-    //    if (Vars.combo > 1)
-    //    {
-    //        combo.enabled = true;
-    //    }
-    //    Vars.combo++;
-    //}
+    void OnTriggerEnter(Collider col)
+    {
+        Debug.Log("Trigger");
+        scoreSound.pitch = 0.9f + (float)Vars.combo / 10;
+        scoreSound.Play();
+        Vars.score += Vars.combo;
+        score.text = "SCORE: " + Vars.score;
+        combo.text = "+" + Vars.combo;
+        if (Vars.combo > 1)
+        {
+            combo.enabled = true;
+        }
+        Vars.combo++;
+    }
 
     void OnCollisionEnter(Collision col)
     {
