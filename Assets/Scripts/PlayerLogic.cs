@@ -172,59 +172,41 @@ public class PlayerLogic : MonoBehaviour
     private bool isSwiping = false;
     private float swipeThreshold = 50f;
 
-    private void Update()
-    {
+    private bool isTouchingLeft = false;
+    private bool isTouchingRight = false;
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            isSwiping = false;
-        }
+    private bool isSwipeUp = false;
+    private bool isTouching = false;
+
+    void Update()
+    {
+        CheckTouchInput();
     }
+
     void FixedUpdate()
     {
         rb.transform.position = new Vector3(rb.transform.position.x, rb.transform.position.y, rb.transform.position.z + speed);
 
-        if (Input.GetMouseButtonDown(0))
+        if (isSwipeUp)
         {
-            startPos = Input.mousePosition;
-            isSwiping = true;
+            // Handle swipe up logic
+            speed += 0.02f;
+            Debug.Log("Swipe up");
         }
-
-        if (EventSystem.current.IsPointerOverGameObject())
+        else if (isTouching)
         {
-            // The mouse is over a UI element, don't execute movement code
-            speed = initialSpeed;
-            return;
-        }
+            // Handle touch logic
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                // The touch is over a UI element, don't execute movement code
+                speed = initialSpeed;
+                return;
+            }
 
-        if (isSwiping)
-        {
-            // Handle swipe logic
-            float deltaY = Input.mousePosition.y - startPos.y;
-            if (deltaY > swipeThreshold)
-            {
-                speed += 0.02f;
-                Debug.Log("Swipe up");
-            }
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            // Handle left or right click logic
-            Vector3 mousePosition = Input.mousePosition;
-            float screenWidth = Screen.width;
-            float screenCenter = screenWidth / 2f;
-            bool isLeftSide = mousePosition.x < screenCenter;
-
-            if (isLeftSide)
-            {
-                Debug.Log("Left");
-                targetPosition = new Vector3(rb.transform.position.x - (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
-            }
-            else
-            {
-                Debug.Log("Right");
-                targetPosition = new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
-            }
+            // Handle left or right touch logic
+            targetPosition = isTouchingLeft
+                ? new Vector3(rb.transform.position.x - (speed + 0.5f), rb.transform.position.y, rb.transform.position.z)
+                : new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
 
             rb.transform.position = Vector3.SmoothDamp(rb.transform.position, targetPosition, ref velocity, smoothTime, Mathf.Infinity, Time.deltaTime);
         }
@@ -235,7 +217,67 @@ public class PlayerLogic : MonoBehaviour
             combo.enabled = false;
         }
     }
-        public void Jump()
+
+    void OnTouchBegan(Vector2 touchPosition)
+    {
+        // Determine if touch is on the left or right side
+        float screenWidth = Screen.width;
+        float screenCenter = screenWidth / 2f;
+        bool isLeftSide = touchPosition.x < screenCenter;
+
+        if (isLeftSide)
+        {
+            isTouchingLeft = true;
+        }
+        else
+        {
+            isTouchingRight = true;
+        }
+
+        // Store the initial position for swipe detection
+        startPos = touchPosition;
+        isTouching = true;
+    }
+
+    void OnTouchMoved(Vector2 touchPosition)
+    {
+        // Check for swipe logic
+        float deltaY = touchPosition.y - startPos.y;
+
+        if (deltaY > swipeThreshold)
+        {
+            isSwipeUp = true;
+            isTouching = false; // Disable left/right movement while swiping up
+        }
+    }
+
+    void OnTouchEnded()
+    {
+        isTouchingLeft = false;
+        isTouchingRight = false;
+        isSwipeUp = false;
+        isTouching = false;
+    }
+
+    void CheckTouchInput()
+    {
+        foreach (Touch touch in Input.touches)
+        {
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    OnTouchBegan(touch.position);
+                    break;
+                case TouchPhase.Moved:
+                    OnTouchMoved(touch.position);
+                    break;
+                case TouchPhase.Ended:
+                    OnTouchEnded();
+                    break;
+            }
+        }
+    }
+    public void Jump()
     {
         Debug.Log("Jumped");
         rb.AddForce(Vector3.up * 1000,ForceMode.Force);
