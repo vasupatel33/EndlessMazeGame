@@ -177,7 +177,7 @@ public class PlayerLogic : MonoBehaviour
 
     private bool isSwipeUp = false;
     private bool isTouching = false;
-    public bool IsJump;
+    
 
     void Update()
     {
@@ -200,14 +200,19 @@ public class PlayerLogic : MonoBehaviour
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 // The touch is over a UI element, don't execute movement code
-                speed = initialSpeed;
+                speed = initialSpeed - 0.05f;
                 return;
             }
 
             // Handle left or right touch logic
-            targetPosition = isTouchingLeft 
-                ? new Vector3(rb.transform.position.x - (speed + 0.5f), rb.transform.position.y, rb.transform.position.z)
-                : new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
+            if (isTouchingLeft)
+            {
+                targetPosition = new Vector3(rb.transform.position.x - (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
+            }
+            else if (isTouchingRight)
+            {
+                targetPosition = new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
+            }
 
             rb.transform.position = Vector3.SmoothDamp(rb.transform.position, targetPosition, ref velocity, smoothTime, Mathf.Infinity, Time.deltaTime);
         }
@@ -219,6 +224,8 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
+
+
     void OnTouchBegan(Vector2 touchPosition)
     {
         // Determine if touch is on the left or right side
@@ -229,19 +236,23 @@ public class PlayerLogic : MonoBehaviour
         if (isLeftSide)
         {
             isTouchingLeft = true;
+            isTouchingRight = false; // Reset right side flag
         }
         else
         {
             isTouchingRight = true;
+            isTouchingLeft = false; // Reset left side flag
         }
-        if (!IsJump)
+
+        if (!Menus.Instance.IsJump)
         {
-            Debug.Log("touch is enable");
+            isTouching = true;
+            Debug.Log("Touch is enabled");
             // Store the initial position for swipe detection
             startPos = touchPosition;
-            isTouching = true;
         }
     }
+
 
     void OnTouchMoved(Vector2 touchPosition)
     {
@@ -261,26 +272,42 @@ public class PlayerLogic : MonoBehaviour
         isTouchingRight = false;
         isSwipeUp = false;
         isTouching = false;
+
+        // Reset the target position when touch ends
+        targetPosition = rb.transform.position;
     }
 
     void CheckTouchInput()
     {
-        foreach (Touch touch in Input.touches)
+        if (!Menus.Instance.IsJump)
         {
-            switch (touch.phase)
+            // Handle player movement only if UI button is not clicked
+            if (Input.touchCount > 0)
             {
-                case TouchPhase.Began:
-                    OnTouchBegan(touch.position);
-                    break;
-                case TouchPhase.Moved:
-                    OnTouchMoved(touch.position);
-                    break;
-                case TouchPhase.Ended:
-                    OnTouchEnded();
-                    break;
+                Touch touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
+                {
+                    if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                    {
+                        // Not clicking on UI, handle movement
+                        switch (touch.phase)
+                        {
+                            case TouchPhase.Began:
+                                OnTouchBegan(touch.position);
+                                break;
+                            case TouchPhase.Moved:
+                                OnTouchMoved(touch.position);
+                                break;
+                            case TouchPhase.Ended:
+                                OnTouchEnded();
+                                break;
+                        }
+                    }
+                }
             }
         }
     }
+
     public void Jump()
     {
         Debug.Log("Jumped");

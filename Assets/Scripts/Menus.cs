@@ -17,12 +17,12 @@ public class Menus : MonoBehaviour
     public Text score;
     public Text gameOverScore;
     public Text gameOverBestScore;
-    public static Menus instance;
+    public static Menus Instance;
     [SerializeField] Button JumpButton;
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
     public void Play() {
         buttonClick.Play();
@@ -120,12 +120,12 @@ public class Menus : MonoBehaviour
         buttonClick.Play();
         Application.Quit();
     }
-    
+    public bool IsJump;
     public void OnJumpBtnPressed()
     {
+        IsJump = true;
         Debug.Log("Jump pressed");
         PlayerLogic.instance.Jump();
-        PlayerLogic.instance.IsJump = true;
         JumpButton.interactable = false;
         StartCoroutine(WaitUntillLandCube());
     }
@@ -133,7 +133,7 @@ public class Menus : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         JumpButton.interactable = true;
-        PlayerLogic.instance.IsJump = false;
+        IsJump = false;
     }
     public void OnButtonPress()
     {
