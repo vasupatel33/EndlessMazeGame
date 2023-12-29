@@ -120,11 +120,12 @@ public class Menus : MonoBehaviour
         buttonClick.Play();
         Application.Quit();
     }
-    public bool shouldJump;
+    
     public void OnJumpBtnPressed()
     {
+        Debug.Log("Jump pressed");
         PlayerLogic.instance.Jump();
-        shouldJump = true;
+        PlayerLogic.instance.IsJump = true;
         JumpButton.interactable = false;
         StartCoroutine(WaitUntillLandCube());
     }
@@ -132,6 +133,7 @@ public class Menus : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         JumpButton.interactable = true;
+        PlayerLogic.instance.IsJump = false;
     }
     public void OnButtonPress()
     {

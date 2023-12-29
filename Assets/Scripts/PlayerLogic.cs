@@ -177,6 +177,7 @@ public class PlayerLogic : MonoBehaviour
 
     private bool isSwipeUp = false;
     private bool isTouching = false;
+    public bool IsJump;
 
     void Update()
     {
@@ -204,7 +205,7 @@ public class PlayerLogic : MonoBehaviour
             }
 
             // Handle left or right touch logic
-            targetPosition = isTouchingLeft
+            targetPosition = isTouchingLeft 
                 ? new Vector3(rb.transform.position.x - (speed + 0.5f), rb.transform.position.y, rb.transform.position.z)
                 : new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
 
@@ -233,10 +234,13 @@ public class PlayerLogic : MonoBehaviour
         {
             isTouchingRight = true;
         }
-
-        // Store the initial position for swipe detection
-        startPos = touchPosition;
-        isTouching = true;
+        if (!IsJump)
+        {
+            Debug.Log("touch is enable");
+            // Store the initial position for swipe detection
+            startPos = touchPosition;
+            isTouching = true;
+        }
     }
 
     void OnTouchMoved(Vector2 touchPosition)
