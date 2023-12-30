@@ -1,10 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
-public class Menus : MonoBehaviour
+public class Menus : MonoBehaviour,IPointerDownHandler
 {
     public GameObject mainMenu;
     public GameObject soundOff;
@@ -23,6 +23,13 @@ public class Menus : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+
+    }
+
+    private void Start()
+    {
+        JumpButton.onClick.AddListener(Quit);
     }
     public void Play() {
         buttonClick.Play();
@@ -117,21 +124,28 @@ public class Menus : MonoBehaviour
     }
     public bool isButtonPressed;
     public void Quit() {
+        Debug.Log("Pressed");
         buttonClick.Play();
         Application.Quit();
     }
     public bool IsJump;
+    int j = 1;
     public void OnJumpBtnPressed()
     {
-        IsJump = true;
-        Debug.Log("Jump pressed");
-        PlayerLogic.instance.Jump();
-        JumpButton.interactable = false;
-        StartCoroutine(WaitUntillLandCube());
+        if (j > 0)
+        {
+            IsJump = true;
+            Debug.Log("Jump pressed");
+            PlayerLogic.instance.Jump();
+            JumpButton.interactable = false;
+            StartCoroutine(WaitUntillLandCube());
+            j--;
+        }
     }
     IEnumerator WaitUntillLandCube()
     {
         yield return new WaitForSeconds(1f);
+        j++;
         JumpButton.interactable = true;
         IsJump = false;
     }
@@ -146,5 +160,10 @@ public class Menus : MonoBehaviour
     {
         Debug.Log("Released");
         isButtonPressed = false;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
     }
 }

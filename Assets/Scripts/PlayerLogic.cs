@@ -127,6 +127,7 @@
 //}
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerLogic : MonoBehaviour
@@ -147,8 +148,6 @@ public class PlayerLogic : MonoBehaviour
     private Vector3 velocity = Vector3.zero; // Velocity for smoothing
     private Vector3 targetPosition;
 
-    private Vector2 fingerDownPosition;
-    private Vector2 fingerUpPosition;
     public float minSwipeDistance = 20f;
     public SwipeManager swipeControls;
     public static PlayerLogic instance;
@@ -181,6 +180,10 @@ public class PlayerLogic : MonoBehaviour
 
     void Update()
     {
+        if(this.transform.gameObject.transform.position.y <= -3)
+        {
+            SceneManager.LoadScene(0);
+        }
         CheckTouchInput();
     }
 
@@ -194,23 +197,25 @@ public class PlayerLogic : MonoBehaviour
             speed += 0.02f;
             Debug.Log("Swipe up");
         }
-        else if (isTouching)
+        else if (isTouching && !Menus.Instance.IsJump)
         {
             // Handle touch logic
-            if (EventSystem.current.IsPointerOverGameObject())
+            if (EventSystem.current.IsPointerOverGameObject() || !Input.GetMouseButton(0))
             {
                 // The touch is over a UI element, don't execute movement code
-                speed = initialSpeed - 0.05f;
+                speed = initialSpeed ;
                 return;
             }
 
             // Handle left or right touch logic
             if (isTouchingLeft)
             {
+                Debug.Log("Left");
                 targetPosition = new Vector3(rb.transform.position.x - (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
             }
             else if (isTouchingRight)
             {
+                Debug.Log("Right");
                 targetPosition = new Vector3(rb.transform.position.x + (speed + 0.5f), rb.transform.position.y, rb.transform.position.z);
             }
 
@@ -279,31 +284,20 @@ public class PlayerLogic : MonoBehaviour
 
     void CheckTouchInput()
     {
-        if (!Menus.Instance.IsJump)
+        foreach (Touch touch in Input.touches)
         {
-            // Handle player movement only if UI button is not clicked
-            if (Input.touchCount > 0)
+            switch (touch.phase)
             {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began)
-                {
-                    if (!EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-                    {
-                        // Not clicking on UI, handle movement
-                        switch (touch.phase)
-                        {
-                            case TouchPhase.Began:
-                                OnTouchBegan(touch.position);
-                                break;
-                            case TouchPhase.Moved:
-                                OnTouchMoved(touch.position);
-                                break;
-                            case TouchPhase.Ended:
-                                OnTouchEnded();
-                                break;
-                        }
-                    }
-                }
+                case TouchPhase.Began:
+                    OnTouchBegan(touch.position);
+                    break;
+                case TouchPhase.Moved:
+                    OnTouchMoved(touch.position);
+
+                    break;
+                case TouchPhase.Ended:
+                    OnTouchEnded();
+                    break;
             }
         }
     }
