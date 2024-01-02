@@ -60,10 +60,10 @@ public class EnemyHealth : MonoBehaviour
 
         for (int i = 0; i < this.transform.childCount; i++)
         {
-            Debug.Log("if");
+            //Debug.Log("if");
             int txtValue = Random.Range(20, 100);
-            Debug.Log("count = " + this.transform.GetChild(i).childCount);
-            Debug.Log("Obj = " + this.transform.GetChild(i).name);
+            //Debug.Log("count = " + this.transform.GetChild(i).childCount);
+            //Debug.Log("Obj = " + this.transform.GetChild(i).name);
 
             Transform childI = this.transform.GetChild(i);
 
@@ -78,7 +78,7 @@ public class EnemyHealth : MonoBehaviour
 
                     if (textComponent != null)
                     {
-                        Debug.Log("Text added");
+                        //Debug.Log("Text added");
                         textComponent.text = txtValue.ToString();
                     }
                     else
@@ -90,8 +90,6 @@ public class EnemyHealth : MonoBehaviour
                 {
                     Debug.LogError("Child at index j not found on childI.");
                 }
-
-                Debug.Log("1");
             }
         }
 

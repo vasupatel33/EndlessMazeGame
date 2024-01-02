@@ -1,0 +1,6 @@
+Leader bar at bottom
+Enemy health bar
+Player Firing
+Team Member increase when enemy successfull enemy destroy
+Item access when enemy successfull enemy destroy
+Player Helath or detail bar

@@ -1981,6 +1981,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7612196481670977515}
   - component: {fileID: 4794241880161027077}
+  - component: {fileID: 3276171850546534619}
   m_Layer: 0
   m_Name: Obstacles
   m_TagString: Untagged
@@ -2022,6 +2023,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleRotation: {fileID: 5974327603581578259}
+--- !u!114 &3276171850546534619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4364421764281846163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d50372e348569546b4bb6cb6d2e60a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4451155016372320569
 GameObject:
   m_ObjectHideFlags: 0
@@ -2992,6 +3005,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3237595167202946538}
   - component: {fileID: 5974327603581578259}
+  - component: {fileID: 4756958543397135652}
   m_Layer: 0
   m_Name: Obstacles
   m_TagString: Untagged
@@ -3031,6 +3045,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rot: 0
+--- !u!114 &4756958543397135652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4939966985565354298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d50372e348569546b4bb6cb6d2e60a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5308860108724685305
 GameObject:
   m_ObjectHideFlags: 0
