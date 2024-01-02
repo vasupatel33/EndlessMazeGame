@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using DG.Tweening;
 public class PlayerLogic : MonoBehaviour
 {
     public float initialSpeed = 0.15f;
@@ -34,11 +34,12 @@ public class PlayerLogic : MonoBehaviour
     {
         speed = initialSpeed;
         cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraSmoothFollow>();
+        scoreSound = GameObject.Find("ScoreSound").GetComponent<AudioSource>();
+        swipeControls = GameObject.Find("GameManager").GetComponent<SwipeManager>();
+        BulletPref = GameObject.Find("Bullet");
         cameraFollow.enabled = true;
         score = GameObject.Find("ScoreText").GetComponent<Text>();
         combo = GameObject.Find("ComboText").GetComponent<Text>();
-        scoreSound = GameObject.Find("ScoreSound").GetComponent<AudioSource>();
-        swipeControls = GameObject.Find("GameManager").GetComponent<SwipeManager>();
     }
 
     private Vector2 startPos;
@@ -52,7 +53,8 @@ public class PlayerLogic : MonoBehaviour
     private bool isTouching = false;
 
     private float timer = 0f;
-    private float executionInterval = 0.1f;
+    private float executionInterval = 0.2f;
+    [SerializeField] GameObject BulletPref;
     void Update()
     {
         timer += Time.deltaTime;
@@ -60,7 +62,9 @@ public class PlayerLogic : MonoBehaviour
         if (timer >= executionInterval)
         {
             // Your code to be executed
-            
+            GameObject pref = Instantiate(BulletPref,this.transform.position,Quaternion.identity);
+            pref.transform.DOMoveZ(transform.position.z + 80, 3);
+            //pref.GetComponent<Rigidbody>().AddForce(Vector3.back * 10, ForceMode.VelocityChange);
             // Reset the timer
             timer = 0f;
         }
@@ -74,7 +78,18 @@ public class PlayerLogic : MonoBehaviour
     void FixedUpdate()
     {
         rb.transform.position = new Vector3(rb.transform.position.x, rb.transform.position.y, rb.transform.position.z + speed);
+        float horizontalInput = Input.GetAxis("Horizontal");
 
+        if (horizontalInput < 0)
+        {
+            Debug.Log("Left");
+            this.transform.position = new Vector3(rb.transform.position.x - (speed + 0.1f), rb.transform.position.y, rb.transform.position.z);
+        }
+        else if (horizontalInput > 0)
+        {
+            Debug.Log("Right");
+            this.transform.position = new Vector3(rb.transform.position.x + (speed + 0.1f), rb.transform.position.y, rb.transform.position.z);
+        }
         if (isSwipeUp)
         {
             // Handle swipe up logic
@@ -90,7 +105,6 @@ public class PlayerLogic : MonoBehaviour
                 speed = initialSpeed ;
                 return;
             }
-
             // Handle left or right touch logic
             if (isTouchingLeft)
             {

@@ -5,7 +5,10 @@ using UnityEngine;
 public class ObstacleEnd : MonoBehaviour
 {   
     void OnTriggerEnter(Collider col) {
-        GameObject.Find("GameManager").GetComponent<ObstacleManagment>().CreateObstacle();
-        Destroy(transform.parent.gameObject, 2f);
+        if (col.gameObject.tag == "Player")
+        {
+            GameObject.Find("GameManager").GetComponent<ObstacleManagment>().CreateObstacle();
+            Destroy(transform.parent.gameObject, 2f);
+        }
     }
 }
