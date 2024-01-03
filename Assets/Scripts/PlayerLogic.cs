@@ -11,7 +11,7 @@ public class PlayerLogic : MonoBehaviour
     public GameObject explosion;
     public CameraSmoothFollow cameraFollow;
     public GameObject gameOverMenu;
-
+            
     public Text score;
     public Text combo;
 
@@ -235,5 +235,9 @@ public class PlayerLogic : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
+    public void GeneratePlayer()
+    {
+        Vector3 spawnPos = new Vector3(this.transform.position.x + 1.5f, this.transform.position.x, this.transform.position.x);
+        GameObject _player = Instantiate(this.transform.gameObject,spawnPos, Quaternion.identity);
+    }
 }

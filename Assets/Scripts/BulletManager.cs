@@ -8,9 +8,9 @@ public class BulletManager : MonoBehaviour
     {
         if (collision.gameObject.tag == "enemy")
         {
-            txtVal = int.Parse(collision.gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text);
+            Debug.Log("Val is = "+ collision.gameObject.transform.GetChild(1).GetComponent<TextMeshPro>().text);
+            txtVal = int.Parse(collision.gameObject.transform.GetChild(1).GetComponent<TextMeshPro>().text);
             txtVal--;
-            Debug.Log("Text value is = " + txtVal);
             foreach(Transform child in collision.gameObject.transform)
             {
                 child.gameObject.GetComponent<TextMeshPro>().text = txtVal.ToString();
