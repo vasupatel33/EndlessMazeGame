@@ -53,7 +53,7 @@ public class PlayerLogic : MonoBehaviour
     private bool isTouching = false;
 
     private float timer = 0f;
-    private float executionInterval = 0.2f;
+    private float executionInterval = 0.15f;
     [SerializeField] GameObject BulletPref;
     void Update()
     {
@@ -66,6 +66,7 @@ public class PlayerLogic : MonoBehaviour
             pref.transform.DOMoveZ(transform.position.z + 80, 3);
             //pref.GetComponent<Rigidbody>().AddForce(Vector3.back * 10, ForceMode.VelocityChange);
             // Reset the timer
+            Destroy(pref,4f);
             timer = 0f;
         }
         if(this.transform.gameObject.transform.position.y <= -3)
