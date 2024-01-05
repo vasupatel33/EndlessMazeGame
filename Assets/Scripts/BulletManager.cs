@@ -11,9 +11,9 @@ public class BulletManager : MonoBehaviour
             Debug.Log("Val is = "+ collision.gameObject.transform.GetChild(1).GetComponent<TextMeshPro>().text);
             txtVal = int.Parse(collision.gameObject.transform.GetChild(1).GetComponent<TextMeshPro>().text);
             txtVal--;
-            foreach(Transform child in collision.gameObject.transform)
+            for(int i = 0; i < 4; i++)
             {
-                child.gameObject.GetComponent<TextMeshPro>().text = txtVal.ToString();
+                collision.transform.GetChild(i).GetComponent<TextMeshPro>().text = txtVal.ToString();
             }
             if(collision.gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text == 0.ToString())
             {

@@ -507,10 +507,10 @@ RectTransform:
   - {fileID: 200678415}
   - {fileID: 792172351}
   - {fileID: 1904820806}
+  - {fileID: 1965670170}
   - {fileID: 313530401}
   - {fileID: 32245768}
   - {fileID: 1458391694}
-  - {fileID: 1965670170}
   m_Father: {fileID: 1332856853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

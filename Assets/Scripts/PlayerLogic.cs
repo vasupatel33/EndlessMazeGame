@@ -66,7 +66,7 @@ public class PlayerLogic : MonoBehaviour
             pref.transform.DOMoveZ(transform.position.z + 80, 3);
             //pref.GetComponent<Rigidbody>().AddForce(Vector3.back * 10, ForceMode.VelocityChange);
             // Reset the timer
-            Destroy(pref,4f);
+            Destroy(pref,3f);
             timer = 0f;
         }
         if(this.transform.gameObject.transform.position.y <= -3)

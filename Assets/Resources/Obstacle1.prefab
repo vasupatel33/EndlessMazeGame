@@ -1077,7 +1077,6 @@ GameObject:
   - component: {fileID: 4101317923171997377}
   - component: {fileID: 8615144125907400819}
   - component: {fileID: 8067058809171401247}
-  - component: {fileID: 31295670643861957}
   m_Layer: 0
   m_Name: Cube
   m_TagString: enemy
@@ -1175,19 +1174,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &31295670643861957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2545345658876418263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d50372e348569546b4bb6cb6d2e60a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyHealthText: []
 --- !u!1 &3024748983474988321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,7 +1407,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d50372e348569546b4bb6cb6d2e60a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyHealthText: []
+  healthtxt: 0
+  DoublePlayer: {fileID: 0}
+  OtherObj: {fileID: 0}
 --- !u!1 &3962461041180116645
 GameObject:
   m_ObjectHideFlags: 0
@@ -2631,7 +2619,6 @@ GameObject:
   - component: {fileID: 7569494976739657365}
   - component: {fileID: 5339590099525296853}
   - component: {fileID: 3503135226099221765}
-  - component: {fileID: 6100432349292810194}
   m_Layer: 0
   m_Name: Cube
   m_TagString: enemy
@@ -2729,19 +2716,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6100432349292810194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6937501209247075212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d50372e348569546b4bb6cb6d2e60a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyHealthText: []
 --- !u!1 &7049301202973976937
 GameObject:
   m_ObjectHideFlags: 0
@@ -3162,7 +3136,6 @@ GameObject:
   - component: {fileID: 8427026944746815759}
   - component: {fileID: 6414576133394646140}
   - component: {fileID: 413663599411332763}
-  - component: {fileID: 4180272411167489537}
   m_Layer: 0
   m_Name: Cube
   m_TagString: enemy
@@ -3260,19 +3233,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4180272411167489537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7684799475881122918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d50372e348569546b4bb6cb6d2e60a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyHealthText: []
 --- !u!1 &7719477456833655524
 GameObject:
   m_ObjectHideFlags: 0
@@ -3285,7 +3245,6 @@ GameObject:
   - component: {fileID: 160060472497571607}
   - component: {fileID: 8408895061967783292}
   - component: {fileID: 8461925635507034381}
-  - component: {fileID: 175272655202614026}
   m_Layer: 0
   m_Name: Cube1
   m_TagString: enemy
@@ -3383,19 +3342,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &175272655202614026
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7719477456833655524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d50372e348569546b4bb6cb6d2e60a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyHealthText: []
 --- !u!1 &8472575503482399113
 GameObject:
   m_ObjectHideFlags: 0

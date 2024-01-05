@@ -19,25 +19,25 @@ public class EnemyHealth : MonoBehaviour
         for (int i = 0; i < this.transform.childCount; i++)
         {
             int txtValue = Random.Range(20, 100);
-
-            //if(Random.Range(0,4) == 0)
-            //{
-            //    Vector3 spawnPos = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
-            //    Instantiate(DoublePlayer,spawnPos, Quaternion.identity,this.transform);
-            //}
-            //else
-            //{
-            //    Vector3 spawnPos = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
-            //    Instantiate(OtherObj, spawnPos, Quaternion.identity, this.transform);
-            //}
-
+            if (Random.Range(0, 5) == 1)
+            {
+                int val = Random.Range(0, this.transform.childCount);
+                Debug.Log("Random val = " + val);
+                Vector3 spawnPos = new Vector3(transform.GetChild(val).gameObject.transform.position.x, transform.GetChild(val).gameObject.transform.position.y + 2, transform.GetChild(val).gameObject.transform.position.z);
+                Debug.Log("Pos = " + spawnPos);
+                Instantiate(DoublePlayer, spawnPos, Quaternion.identity, transform.GetChild(val).transform);
+            }
+            else
+            {
+                Debug.Log("Else");
+            }
             Transform childI = this.transform.GetChild(i);
-
-            for (int j = 0; j < childI.childCount; j++)
+            Debug.Log("Child = "+childI);
+            for (int j = 0; j < 4; j++)
             {
                 //Debug.Log("name = " + childI.GetChild(j).name);
                 GameObject childJ = childI.GetChild(j).gameObject;
-
+                Debug.Log("Child = " + childJ);
                 if (childJ != null)
                 {
                     TextMeshPro textComponent = childJ.GetComponent<TextMeshPro>();
