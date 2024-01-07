@@ -40,12 +40,13 @@ public class Menus : MonoBehaviour,IPointerDownHandler
         GameObject playerCube = GameObject.Find("PlayerCube");
         if(playerCube != null) {
             playerCube.transform.position = new Vector3(0, 0.5f, 0);
+            //PlayerLogic.instance.AllGeneteratedPlayer.Add(playerCube);
         }else {
             GameObject player = Instantiate (Resources.Load ("PlayerCube") as GameObject);
             player.transform.position = new Vector3(0, 0.5f, 0);
             player.name = "PlayerCube";
+            //PlayerLogic.instance.AllGeneteratedPlayer.Add(playerCube);
         }
-
         
         GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
         for(int i = 0; i < obstacles.Length; i++) {

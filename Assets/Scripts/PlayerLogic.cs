@@ -3,6 +3,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections.Generic;
+using static UnityEditor.Experimental.GraphView.GraphView;
+
 public class PlayerLogic : MonoBehaviour
 {
     public float initialSpeed = 0.15f;
@@ -21,29 +24,12 @@ public class PlayerLogic : MonoBehaviour
     private Vector3 velocity = Vector3.zero; // Velocity for smoothing
     private Vector3 targetPosition;
 
-    public float minSwipeDistance = 20f;
-    public SwipeManager swipeControls;
+    //public float minSwipeDistance = 20f;;
     public static PlayerLogic instance;
-    private int fireSpeed;
-    private void Awake()
-    {
-        instance = this;
-    }
 
-    void Start()
-    {
-        speed = initialSpeed;
-        cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraSmoothFollow>();
-        scoreSound = GameObject.Find("ScoreSound").GetComponent<AudioSource>();
-        swipeControls = GameObject.Find("GameManager").GetComponent<SwipeManager>();
-        BulletPref = GameObject.Find("Bullet");
-        cameraFollow.enabled = true;
-        score = GameObject.Find("ScoreText").GetComponent<Text>();
-        combo = GameObject.Find("ComboText").GetComponent<Text>();
-    }
-
+    public List<GameObject> AllGeneteratedPlayer;
+   
     private Vector2 startPos;
-    private bool isSwiping = false;
     private float swipeThreshold = 50f;
 
     private bool isTouchingLeft = false;
@@ -55,6 +41,24 @@ public class PlayerLogic : MonoBehaviour
     private float timer = 0f;
     private float executionInterval = 0.15f;
     [SerializeField] GameObject BulletPref;
+    [SerializeField] GameObject PlayerPref;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    void Start()
+    {
+        PlayerPref = GameObject.Find("PlayerCube");
+        speed = initialSpeed;
+        cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraSmoothFollow>();
+        scoreSound = GameObject.Find("ScoreSound").GetComponent<AudioSource>();
+        BulletPref = GameObject.Find("Bullet");
+        cameraFollow.enabled = true;
+        score = GameObject.Find("ScoreText").GetComponent<Text>();
+        combo = GameObject.Find("ComboText").GetComponent<Text>();
+    }
     void Update()
     {
         timer += Time.deltaTime;
@@ -63,10 +67,10 @@ public class PlayerLogic : MonoBehaviour
         {
             // Your code to be executed
             GameObject pref = Instantiate(BulletPref,this.transform.position,Quaternion.identity);
-            pref.transform.DOMoveZ(transform.position.z + 80, 3);
+            pref.transform.DOMoveZ(transform.position.z + 180, 3);
             //pref.GetComponent<Rigidbody>().AddForce(Vector3.back * 10, ForceMode.VelocityChange);
             // Reset the timer
-            Destroy(pref,3f);
+            Destroy(pref,2.5f);
             timer = 0f;
         }
         if(this.transform.gameObject.transform.position.y <= -3)
@@ -128,8 +132,6 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
-
-
     void OnTouchBegan(Vector2 touchPosition)
     {
         // Determine if touch is on the left or right side
@@ -156,7 +158,6 @@ public class PlayerLogic : MonoBehaviour
             startPos = touchPosition;
         }
     }
-
 
     void OnTouchMoved(Vector2 touchPosition)
     {
@@ -235,9 +236,22 @@ public class PlayerLogic : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    public void GeneratePlayer()
+
+    public void SpawnFollowingPlayer()
     {
-        Vector3 spawnPos = new Vector3(this.transform.position.x + 1.5f, this.transform.position.x, this.transform.position.x);
-        GameObject _player = Instantiate(this.transform.gameObject,spawnPos, Quaternion.identity);
+        if (AllGeneteratedPlayer.Count > 0)
+        {
+            Vector3 spawnPosition = AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position - new Vector3(-1.5f, 0f, 0f);
+            GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity);
+            AllGeneteratedPlayer.Add(newPlayer);
+            Debug.Log("Player added");
+        }
+        else
+        {
+            Vector3 spawnPosition = transform.position - new Vector3(-1f, 0f, 0f);
+            GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity);
+            AllGeneteratedPlayer.Add(newPlayer);
+            Debug.LogWarning("Main player must be instantiated first!");
+        }
     }
 }
