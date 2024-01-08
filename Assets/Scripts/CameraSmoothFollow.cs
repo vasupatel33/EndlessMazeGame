@@ -11,9 +11,22 @@ public class CameraSmoothFollow : MonoBehaviour
     void OnEnable() {
         target = GameObject.Find("PlayerCube").transform;
     }
-    
-    void FixedUpdate() {
-        Vector3 targetPosition = target.TransformPoint(new Vector3(0, 6, -8));
-        transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+
+    void FixedUpdate()
+    {
+        if(PlayerLogic.instance.AllGeneteratedPlayer.Count > 0)
+        {
+            target = PlayerLogic.instance.AllGeneteratedPlayer[PlayerLogic.instance.AllGeneteratedPlayer.Count - 1].transform;
+        }
+        if (target != null)
+        {
+            Vector3 targetPosition = target.TransformPoint(new Vector3(0, 6, -8));
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);
+        }
+        else
+        {
+            Debug.Log("Game Over");
+            
+        }
     }
 }

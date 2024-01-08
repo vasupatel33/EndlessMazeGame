@@ -170,4 +170,19 @@ public class Menus : MonoBehaviour,IPointerDownHandler
     {
         throw new System.NotImplementedException();
     }
+    public AudioSource scoreSound;
+    public Text combo;
+    public void ScoreManager()
+    {
+        scoreSound.pitch = 0.9f + (float)Vars.combo / 10;
+        scoreSound.Play();
+        Vars.score += Vars.combo;
+        score.text = "SCORE: " + Vars.score;
+        combo.text = "+" + Vars.combo;
+        if (Vars.combo > 1)
+        {
+            combo.enabled = true;
+        }
+        Vars.combo++;
+    }
 }

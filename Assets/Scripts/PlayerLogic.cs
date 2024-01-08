@@ -57,10 +57,10 @@ public class PlayerLogic : MonoBehaviour
         parent = GameObject.Find("AllPlayer");
         speed = initialSpeed;
         cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraSmoothFollow>();
-        scoreSound = GameObject.Find("ScoreSound").GetComponent<AudioSource>();
+        //scoreSound = GameObject.Find("ScoreSound").GetComponent<AudioSource>();
         BulletPref = GameObject.Find("Bullet");
         cameraFollow.enabled = true;
-        score = GameObject.Find("ScoreText").GetComponent<Text>();
+        //score = GameObject.Find("ScoreText").GetComponent<Text>();
         combo = GameObject.Find("ComboText").GetComponent<Text>();
     }
     void Update()
@@ -79,7 +79,20 @@ public class PlayerLogic : MonoBehaviour
         }
         if(this.transform.gameObject.transform.position.y <= -3)
         {
-            SceneManager.LoadScene(0);
+            //SceneManager.LoadScene(0);
+            Destroy(this.gameObject);
+            AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
+            AllRigidbodies.RemoveAt(AllRigidbodies.Count - 1);
+            //cameraFollow.enabled = false;
+            explosion.SetActive(true);
+
+            if (AllGeneteratedPlayer.Count == 0)
+            {
+                Debug.Log("Collision");
+                explosion.transform.parent = null;
+                GameObject.Find("GameManager").GetComponent<Menus>().ShowGameOverMenu();
+                GameObject.Find("ExplosionSound").GetComponent<AudioSource>().Play();
+            }
         }
         CheckTouchInput();
     }
@@ -220,16 +233,18 @@ public class PlayerLogic : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         Debug.Log("Trigger");
-        scoreSound.pitch = 0.9f + (float)Vars.combo / 10;
-        scoreSound.Play();
-        Vars.score += Vars.combo;
-        score.text = "SCORE: " + Vars.score;
-        combo.text = "+" + Vars.combo;
-        if (Vars.combo > 1)
-        {
-            combo.enabled = true;
-        }
-        Vars.combo++;
+        Menus.Instance.ScoreManager();
+        
+        //scoreSound.pitch = 0.9f + (float)Vars.combo / 10;
+        //scoreSound.Play();
+        //Vars.score += Vars.combo;
+        //score.text = "SCORE: " + Vars.score;
+        //combo.text = "+" + Vars.combo;
+        //if (Vars.combo > 1)
+        //{
+        //    combo.enabled = true;
+        //}
+        //Vars.combo++;
     }
 
     void OnCollisionEnter(Collision col)
@@ -237,13 +252,15 @@ public class PlayerLogic : MonoBehaviour
         if (col.gameObject.tag == "enemy")
         {
             Destroy(this.gameObject);
+            AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
+            AllRigidbodies.RemoveAt(AllRigidbodies.Count - 1);
+            //cameraFollow.enabled = false;
+            explosion.SetActive(true);
             
             if (AllGeneteratedPlayer.Count == 0)
             {
                 Debug.Log("Collision");
                 explosion.transform.parent = null;
-                explosion.SetActive(true);
-                cameraFollow.enabled = false;
                 GameObject.Find("GameManager").GetComponent<Menus>().ShowGameOverMenu();
                 GameObject.Find("ExplosionSound").GetComponent<AudioSource>().Play();
             }
@@ -252,7 +269,7 @@ public class PlayerLogic : MonoBehaviour
 
     public void SpawnFollowingPlayer()
     {
-        if (AllGeneteratedPlayer.Count > 0)
+        if (AllGeneteratedPlayer.Count < 3)
         {
             Vector3 spawnPosition = AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position - new Vector3(-1.5f, 0f, 0f);
             GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity,parent.transform);

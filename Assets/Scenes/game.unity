@@ -2596,6 +2596,8 @@ MonoBehaviour:
   JumpButton: {fileID: 200678417}
   isButtonPressed: 0
   IsJump: 0
+  scoreSound: {fileID: 1142654737}
+  combo: {fileID: 1904820807}
 --- !u!114 &1068309966
 MonoBehaviour:
   m_ObjectHideFlags: 0
