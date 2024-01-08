@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 public class Menus : MonoBehaviour,IPointerDownHandler
 {
     public GameObject mainMenu;
+    public GameObject parent;
     public GameObject soundOff;
     public GameObject gamePlayMenu;
     public GameObject gameOverMenu;
@@ -23,8 +25,6 @@ public class Menus : MonoBehaviour,IPointerDownHandler
     private void Awake()
     {
         Instance = this;
-
-
     }
 
     private void Start()
@@ -42,7 +42,9 @@ public class Menus : MonoBehaviour,IPointerDownHandler
             playerCube.transform.position = new Vector3(0, 0.5f, 0);
             //PlayerLogic.instance.AllGeneteratedPlayer.Add(playerCube);
         }else {
-            GameObject player = Instantiate (Resources.Load ("PlayerCube") as GameObject);
+            GameObject player = Instantiate (Resources.Load ("PlayerCube") as GameObject,parent.transform);
+            PlayerLogic.instance.AllGeneteratedPlayer.Add(player);
+            PlayerLogic.instance.AllRigidbodies.Add(player.GetComponent<Rigidbody>());
             player.transform.position = new Vector3(0, 0.5f, 0);
             player.name = "PlayerCube";
             //PlayerLogic.instance.AllGeneteratedPlayer.Add(playerCube);
@@ -59,7 +61,6 @@ public class Menus : MonoBehaviour,IPointerDownHandler
         for(int i = 0; i < 5; i++) {
             GameObject.Find("GameManager").GetComponent<ObstacleManagment>().CreateObstacle();
         }
-        
         mainMenu.SetActive(false);
         gamePlayMenu.SetActive(true);
         Time.timeScale = 1;
@@ -136,8 +137,10 @@ public class Menus : MonoBehaviour,IPointerDownHandler
         if (j > 0)
         {
             IsJump = true;
-            Debug.Log("Jump pressed");
-            PlayerLogic.instance.Jump();
+            Debug.Log("Jump pressed"+ parent.transform.position.y);
+            //PlayerLogic.instance.Jump();
+            Vector3 jumpPos = new Vector3(parent.transform.position.x, parent.transform.position.y + 3, parent.transform.position.z);
+            parent.transform.position = Vector3.Lerp(parent.transform.position, jumpPos, 0.8f);
             JumpButton.interactable = false;
             StartCoroutine(WaitUntillLandCube());
             j--;

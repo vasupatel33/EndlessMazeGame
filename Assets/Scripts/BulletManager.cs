@@ -30,10 +30,6 @@ public class BulletManager : MonoBehaviour
 
 
 
-
-
-
-
                     //Debug.Log("Player Generated");
                     //if (AllGeneteratedPlayer.Count > 0)
                     //{

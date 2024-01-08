@@ -24,11 +24,14 @@ public class PlayerLogic : MonoBehaviour
     private Vector3 velocity = Vector3.zero; // Velocity for smoothing
     private Vector3 targetPosition;
 
-    //public float minSwipeDistance = 20f;;
+    //public float minSwipeDistance = 20f;
     public static PlayerLogic instance;
 
     public List<GameObject> AllGeneteratedPlayer;
+    public List<Rigidbody> AllRigidbodies;
+    [SerializeField] private GameObject parent;
    
+    //Swipe and left and right move variables
     private Vector2 startPos;
     private float swipeThreshold = 50f;
 
@@ -51,6 +54,7 @@ public class PlayerLogic : MonoBehaviour
     void Start()
     {
         PlayerPref = GameObject.Find("PlayerCube");
+        parent = GameObject.Find("AllPlayer");
         speed = initialSpeed;
         cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraSmoothFollow>();
         scoreSound = GameObject.Find("ScoreSound").GetComponent<AudioSource>();
@@ -204,8 +208,13 @@ public class PlayerLogic : MonoBehaviour
 
     public void Jump()
     {
-        Debug.Log("Jumped");
-        rb.AddForce(Vector3.up * 1000,ForceMode.Force);
+        //parent.transform.DOMoveY(transform.position.y + 2,1);
+
+        //foreach (Rigidbody obj in AllRigidbodies)
+        //{
+        //    Debug.Log("Jumped");
+        //    obj.AddForce(Vector3.up * 1000, ForceMode.Force);
+        //}
     }
 
     void OnTriggerEnter(Collider col)
@@ -227,13 +236,17 @@ public class PlayerLogic : MonoBehaviour
     {
         if (col.gameObject.tag == "enemy")
         {
-            Debug.Log("Collision");
-            explosion.transform.parent = null;
-            explosion.SetActive(true);
-            cameraFollow.enabled = false;
-            GameObject.Find("GameManager").GetComponent<Menus>().ShowGameOverMenu();
-            GameObject.Find("ExplosionSound").GetComponent<AudioSource>().Play();
             Destroy(this.gameObject);
+            
+            if (AllGeneteratedPlayer.Count == 0)
+            {
+                Debug.Log("Collision");
+                explosion.transform.parent = null;
+                explosion.SetActive(true);
+                cameraFollow.enabled = false;
+                GameObject.Find("GameManager").GetComponent<Menus>().ShowGameOverMenu();
+                GameObject.Find("ExplosionSound").GetComponent<AudioSource>().Play();
+            }
         }
     }
 
@@ -242,16 +255,10 @@ public class PlayerLogic : MonoBehaviour
         if (AllGeneteratedPlayer.Count > 0)
         {
             Vector3 spawnPosition = AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position - new Vector3(-1.5f, 0f, 0f);
-            GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity);
+            GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity,parent.transform);
             AllGeneteratedPlayer.Add(newPlayer);
+            AllRigidbodies.Add(newPlayer.GetComponent<Rigidbody>());
             Debug.Log("Player added");
-        }
-        else
-        {
-            Vector3 spawnPosition = transform.position - new Vector3(-1f, 0f, 0f);
-            GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity);
-            AllGeneteratedPlayer.Add(newPlayer);
-            Debug.LogWarning("Main player must be instantiated first!");
         }
     }
 }
