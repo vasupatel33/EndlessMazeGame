@@ -139,8 +139,9 @@ public class Menus : MonoBehaviour,IPointerDownHandler
             IsJump = true;
             Debug.Log("Jump pressed"+ parent.transform.position.y);
             //PlayerLogic.instance.Jump();
-            Vector3 jumpPos = new Vector3(parent.transform.position.x, parent.transform.position.y + 3, parent.transform.position.z);
-            parent.transform.position = Vector3.Lerp(parent.transform.position, jumpPos, 0.8f);
+            //Vector3 jumpPos = new Vector3(parent.transform.position.x, parent.transform.position.y + 3, parent.transform.position.z);
+            parent.transform.DOMoveY(parent.transform.position.y + 4, 0.7f);
+            //parent.transform.position = Vector3.Lerp(parent.transform.position, jumpPos, 1.2f);
             JumpButton.interactable = false;
             StartCoroutine(WaitUntillLandCube());
             j--;
