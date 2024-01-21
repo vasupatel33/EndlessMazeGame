@@ -24,7 +24,7 @@ public class PlayerLogic : MonoBehaviour
     private Vector3 velocity = Vector3.zero; // Velocity for smoothing
     private Vector3 targetPosition;
 
-    //public float minSwipeDistance = 20f;
+    //public float minSwipeDistance = 
     public static PlayerLogic instance;
 
     public List<GameObject> AllGeneteratedPlayer;
@@ -53,7 +53,7 @@ public class PlayerLogic : MonoBehaviour
 
     void Start()
     {
-        PlayerPref = GameObject.Find("PlayerCube");
+        PlayerPref = Resources.Load("PlayerCube") as GameObject;
         parent = GameObject.Find("AllPlayer");
         speed = initialSpeed;
         cameraFollow = GameObject.Find("Main Camera").GetComponent<CameraSmoothFollow>();
@@ -252,11 +252,6 @@ public class PlayerLogic : MonoBehaviour
         if (col.gameObject.tag == "enemy")
         {
             Destroy(this.gameObject);
-            AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
-            AllRigidbodies.RemoveAt(AllRigidbodies.Count - 1);
-            //cameraFollow.enabled = false;
-            explosion.SetActive(true);
-            
             if (AllGeneteratedPlayer.Count == 0)
             {
                 Debug.Log("Collision");
@@ -264,13 +259,20 @@ public class PlayerLogic : MonoBehaviour
                 GameObject.Find("GameManager").GetComponent<Menus>().ShowGameOverMenu();
                 GameObject.Find("ExplosionSound").GetComponent<AudioSource>().Play();
             }
+            //AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
+            AllGeneteratedPlayer.Remove(AllGeneteratedPlayer[AllGeneteratedPlayer.Count-1]);
+            AllRigidbodies.RemoveAt(AllRigidbodies.Count - 1);
+            explosion.SetActive(true);
+            
         }
     }
 
     public void SpawnFollowingPlayer()
     {
-        if (AllGeneteratedPlayer.Count < 3)
+        if (AllGeneteratedPlayer.Count < 5)
         {
+            Debug.Log("Count = "+AllGeneteratedPlayer.Count);
+            Debug.Log("Pos = " +AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position);   
             Vector3 spawnPosition = AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position - new Vector3(-1.5f, 0f, 0f);
             GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity,parent.transform);
             AllGeneteratedPlayer.Add(newPlayer);

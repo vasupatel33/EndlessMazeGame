@@ -18,7 +18,7 @@ public class EnemyHealth : MonoBehaviour
     {
         for (int i = 0; i < this.transform.childCount; i++)
         {
-            int txtValue = Random.Range(20, 100);
+            int txtValue = Random.Range(20, 30);
             if (Random.Range(0, 2) == 1)
             {
                 int val = Random.Range(0, this.transform.childCount);
@@ -37,7 +37,7 @@ public class EnemyHealth : MonoBehaviour
             {
                 //Debug.Log("name = " + childI.GetChild(j).name);
                 GameObject childJ = childI.GetChild(j).gameObject;
-                Debug.Log("Child = " + childJ);
+                //Debug.Log("Child = " + childJ);
                 if (childJ != null)
                 {
                     TextMeshPro textComponent = childJ.GetComponent<TextMeshPro>();
@@ -50,12 +50,12 @@ public class EnemyHealth : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogError("TextMeshProUGUI component not found on childJ.");
+                        //Debug.LogError("TextMeshProUGUI component not found on childJ.");
                     }
                 }
                 else
                 {
-                    Debug.LogError("Child at index j not found on childI.");
+                    //Debug.LogError("Child at index j not found on childI.");
                 }
             }
         }

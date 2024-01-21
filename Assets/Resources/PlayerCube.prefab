@@ -155,9 +155,11 @@ MonoBehaviour:
   score: {fileID: 0}
   combo: {fileID: 0}
   smoothTime: 0.1
-  minSwipeDistance: 20
-  swipeControls: {fileID: 0}
+  AllGeneteratedPlayer: []
+  AllRigidbodies: []
+  parent: {fileID: 0}
   BulletPref: {fileID: 0}
+  PlayerPref: {fileID: 0}
 --- !u!1 &2868021045856946604
 GameObject:
   m_ObjectHideFlags: 0

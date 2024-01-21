@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -31,6 +32,7 @@ public class Menus : MonoBehaviour,IPointerDownHandler
     {
         JumpButton.onClick.AddListener(Quit);
     }
+    bool isOn;
     public void Play() {
         buttonClick.Play();
         gameOverMenu.SetActive(false);
@@ -42,7 +44,16 @@ public class Menus : MonoBehaviour,IPointerDownHandler
             playerCube.transform.position = new Vector3(0, 0.5f, 0);
             //PlayerLogic.instance.AllGeneteratedPlayer.Add(playerCube);
         }else {
-            GameObject player = Instantiate (Resources.Load ("PlayerCube") as GameObject,parent.transform);
+            GameObject player;
+            if (isOn)
+            {
+                player=  PlayerLogic.instance.AllGeneteratedPlayer[Random.Range(0, PlayerLogic.instance.AllGeneteratedPlayer.Count)].transform.gameObject;
+            }
+            else
+            {
+                player = Instantiate(Resources.Load("PlayerCube") as GameObject, parent.transform);
+                isOn = true;
+            }
             PlayerLogic.instance.AllGeneteratedPlayer.Add(player);
             PlayerLogic.instance.AllRigidbodies.Add(player.GetComponent<Rigidbody>());
             player.transform.position = new Vector3(0, 0.5f, 0);

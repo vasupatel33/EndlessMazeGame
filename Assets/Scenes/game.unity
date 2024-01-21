@@ -1458,6 +1458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   smoothTime: 0.3
+  GameOverPanel: {fileID: 151626551}
 --- !u!45 &534669907
 Skybox:
   m_ObjectHideFlags: 0
@@ -4650,7 +4651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7386792591201556785, guid: 7acc8fb3024bb07409141f04b65364b7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.27
       objectReference: {fileID: 0}
     - target: {fileID: 7386792591201556785, guid: 7acc8fb3024bb07409141f04b65364b7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4684,6 +4685,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8033362454849599384, guid: 7acc8fb3024bb07409141f04b65364b7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 04a07acae7c184c4dbb3a23ca97d9b59, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
