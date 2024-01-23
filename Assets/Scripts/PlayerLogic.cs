@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections.Generic;
-using static UnityEditor.Experimental.GraphView.GraphView;
+using System.Collections;
 
 public class PlayerLogic : MonoBehaviour
 {
@@ -28,7 +28,6 @@ public class PlayerLogic : MonoBehaviour
     public static PlayerLogic instance;
 
     public List<GameObject> AllGeneteratedPlayer;
-    public List<Rigidbody> AllRigidbodies;
     [SerializeField] private GameObject parent;
    
     //Swipe and left and right move variables
@@ -79,10 +78,12 @@ public class PlayerLogic : MonoBehaviour
         }
         if(this.transform.gameObject.transform.position.y <= -3)
         {
+            Menus.Instance.isOn = false;
             //SceneManager.LoadScene(0);
             Destroy(this.gameObject);
-            AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
-            AllRigidbodies.RemoveAt(AllRigidbodies.Count - 1);
+            //AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
+            AllGeneteratedPlayer.Remove(this.gameObject);
+            StartCoroutine(CleanUpMissingObjects());
             //cameraFollow.enabled = false;
             explosion.SetActive(true);
 
@@ -96,6 +97,19 @@ public class PlayerLogic : MonoBehaviour
         }
         CheckTouchInput();
     }
+    private IEnumerator CleanUpMissingObjects()
+    {
+        yield return null; // Wait for the next frame
+
+        for (int i = AllGeneteratedPlayer.Count - 1; i >= 0; i--)
+        {
+            if (AllGeneteratedPlayer[i] == null)
+            {
+                AllGeneteratedPlayer.RemoveAt(i);
+            }
+        }
+    }
+
 
     void FixedUpdate()
     {
@@ -104,12 +118,10 @@ public class PlayerLogic : MonoBehaviour
 
         if (horizontalInput < 0)
         {
-            Debug.Log("Left");
             this.transform.position = new Vector3(rb.transform.position.x - (speed + 0.1f), rb.transform.position.y, rb.transform.position.z);
         }
         else if (horizontalInput > 0)
         {
-            Debug.Log("Right");
             this.transform.position = new Vector3(rb.transform.position.x + (speed + 0.1f), rb.transform.position.y, rb.transform.position.z);
         }
         if (isSwipeUp)
@@ -260,8 +272,8 @@ public class PlayerLogic : MonoBehaviour
                 GameObject.Find("ExplosionSound").GetComponent<AudioSource>().Play();
             }
             //AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
-            AllGeneteratedPlayer.Remove(AllGeneteratedPlayer[AllGeneteratedPlayer.Count-1]);
-            AllRigidbodies.RemoveAt(AllRigidbodies.Count - 1);
+            AllGeneteratedPlayer.Remove(this.gameObject);
+            StartCoroutine(CleanUpMissingObjects());
             explosion.SetActive(true);
             
         }
@@ -269,14 +281,20 @@ public class PlayerLogic : MonoBehaviour
 
     public void SpawnFollowingPlayer()
     {
-        if (AllGeneteratedPlayer.Count < 5)
+        Debug.Log("ifff = " + parent.transform.childCount);
+        AllGeneteratedPlayer.Clear();
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            Debug.Log("For");
+            AllGeneteratedPlayer.Add(parent.transform.GetChild(i).gameObject);
+        }
+        if (AllGeneteratedPlayer.Count < 3)
         {
             Debug.Log("Count = "+AllGeneteratedPlayer.Count);
             Debug.Log("Pos = " +AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position);   
             Vector3 spawnPosition = AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position - new Vector3(-1.5f, 0f, 0f);
             GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity,parent.transform);
             AllGeneteratedPlayer.Add(newPlayer);
-            AllRigidbodies.Add(newPlayer.GetComponent<Rigidbody>());
             Debug.Log("Player added");
         }
     }

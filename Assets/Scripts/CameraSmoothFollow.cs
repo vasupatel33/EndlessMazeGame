@@ -5,12 +5,14 @@ using UnityEngine;
 public class CameraSmoothFollow : MonoBehaviour
 {
     public Transform target;
-    public float smoothTime = 0.3F;
+    public float smoothTime = 0.3f;
     private Vector3 velocity = Vector3.zero;
     [SerializeField] GameObject GameOverPanel;
 
+    [SerializeField] GameObject parent;
+
     void OnEnable() {
-        //target = GameObject.Find("PlayerCube").transform;
+        target = GameObject.Find("PlayerCube").transform;
     }
 
     void FixedUpdate()
@@ -34,8 +36,11 @@ public class CameraSmoothFollow : MonoBehaviour
         }
         else
         {
+            Debug.Log("elseeeeeeee"+ PlayerLogic.instance.AllGeneteratedPlayer.Count);
+            
             if (PlayerLogic.instance.AllGeneteratedPlayer.Count != 0)
             {
+                Debug.Log("else if");
                 target = PlayerLogic.instance.AllGeneteratedPlayer[Random.Range(0, PlayerLogic.instance.AllGeneteratedPlayer.Count)].transform;
             }
             else

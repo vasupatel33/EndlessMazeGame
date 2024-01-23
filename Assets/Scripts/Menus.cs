@@ -32,8 +32,9 @@ public class Menus : MonoBehaviour,IPointerDownHandler
     {
         JumpButton.onClick.AddListener(Quit);
     }
-    bool isOn;
+    public bool isOn;
     public void Play() {
+        isOn = false;
         buttonClick.Play();
         gameOverMenu.SetActive(false);
         pauseMenu.SetActive(false);
@@ -55,7 +56,6 @@ public class Menus : MonoBehaviour,IPointerDownHandler
                 isOn = true;
             }
             PlayerLogic.instance.AllGeneteratedPlayer.Add(player);
-            PlayerLogic.instance.AllRigidbodies.Add(player.GetComponent<Rigidbody>());
             player.transform.position = new Vector3(0, 0.5f, 0);
             player.name = "PlayerCube";
             //PlayerLogic.instance.AllGeneteratedPlayer.Add(playerCube);
@@ -148,7 +148,6 @@ public class Menus : MonoBehaviour,IPointerDownHandler
         if (j > 0)
         {
             IsJump = true;
-            Debug.Log("Jump pressed"+ parent.transform.position.y);
             //PlayerLogic.instance.Jump();
             //Vector3 jumpPos = new Vector3(parent.transform.position.x, parent.transform.position.y + 3, parent.transform.position.z);
             parent.transform.DOMoveY(parent.transform.position.y + 4, 0.7f);

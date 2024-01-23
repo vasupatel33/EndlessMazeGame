@@ -22,9 +22,9 @@ public class EnemyHealth : MonoBehaviour
             if (Random.Range(0, 2) == 1)
             {
                 int val = Random.Range(0, this.transform.childCount);
-                Debug.Log("Random val = " + val);
+                
                 Vector3 spawnPos = new Vector3(transform.GetChild(val).gameObject.transform.position.x, transform.GetChild(val).gameObject.transform.position.y + 2, transform.GetChild(val).gameObject.transform.position.z);
-                Debug.Log("Pos = " + spawnPos);
+                
                 Instantiate(DoublePlayer, spawnPos, Quaternion.identity, transform.GetChild(val).transform);
             }
             else
@@ -32,7 +32,6 @@ public class EnemyHealth : MonoBehaviour
                 Debug.Log("Else");
             }
             Transform childI = this.transform.GetChild(i);
-            Debug.Log("Child = "+childI);
             for (int j = 0; j < 4; j++)
             {
                 //Debug.Log("name = " + childI.GetChild(j).name);
