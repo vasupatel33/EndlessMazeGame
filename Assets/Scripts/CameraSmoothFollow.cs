@@ -38,9 +38,9 @@ public class CameraSmoothFollow : MonoBehaviour
         {
             Debug.Log("elseeeeeeee"+ PlayerLogic.instance.AllGeneteratedPlayer.Count);
             
-            if (PlayerLogic.instance.AllGeneteratedPlayer.Count != 0)
+            if (PlayerLogic.instance.parent.transform.childCount != 0)
             {
-                Debug.Log("else if");
+                Debug.Log("else if "+ PlayerLogic.instance.AllGeneteratedPlayer.Count);
                 target = PlayerLogic.instance.AllGeneteratedPlayer[Random.Range(0, PlayerLogic.instance.AllGeneteratedPlayer.Count)].transform;
             }
             else

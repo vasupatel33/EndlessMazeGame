@@ -18,7 +18,7 @@ public class EnemyHealth : MonoBehaviour
     {
         for (int i = 0; i < this.transform.childCount; i++)
         {
-            int txtValue = Random.Range(20, 30);
+            int txtValue = Random.Range(5, 10);
             if (Random.Range(0, 2) == 1)
             {
                 int val = Random.Range(0, this.transform.childCount);

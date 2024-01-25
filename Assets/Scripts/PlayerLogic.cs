@@ -8,8 +8,8 @@ using System.Collections;
 
 public class PlayerLogic : MonoBehaviour
 {
-    public float initialSpeed = 0.15f;
-    private float speed = 0.15f;
+    public float initialSpeed = 0.13f;
+    private float speed = 0.13f;
     public Rigidbody rb;
     public GameObject explosion;
     public CameraSmoothFollow cameraFollow;
@@ -28,7 +28,7 @@ public class PlayerLogic : MonoBehaviour
     public static PlayerLogic instance;
 
     public List<GameObject> AllGeneteratedPlayer;
-    [SerializeField] private GameObject parent;
+    public GameObject parent;
    
     //Swipe and left and right move variables
     private Vector2 startPos;
@@ -84,6 +84,7 @@ public class PlayerLogic : MonoBehaviour
             //AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
             AllGeneteratedPlayer.Remove(this.gameObject);
             StartCoroutine(CleanUpMissingObjects());
+            RemoveGameObjectByName(this.gameObject.name);
             //cameraFollow.enabled = false;
             explosion.SetActive(true);
 
@@ -99,8 +100,6 @@ public class PlayerLogic : MonoBehaviour
     }
     private IEnumerator CleanUpMissingObjects()
     {
-        yield return null; // Wait for the next frame
-
         for (int i = AllGeneteratedPlayer.Count - 1; i >= 0; i--)
         {
             if (AllGeneteratedPlayer[i] == null)
@@ -108,8 +107,8 @@ public class PlayerLogic : MonoBehaviour
                 AllGeneteratedPlayer.RemoveAt(i);
             }
         }
+        yield return null;
     }
-
 
     void FixedUpdate()
     {
@@ -127,7 +126,7 @@ public class PlayerLogic : MonoBehaviour
         if (isSwipeUp)
         {
             // Handle swipe up logic
-            speed += 0.02f;
+            speed += 0.020f;
             Debug.Log("Swipe up");
         }
         else if (isTouching && !Menus.Instance.IsJump)
@@ -273,29 +272,60 @@ public class PlayerLogic : MonoBehaviour
             }
             //AllGeneteratedPlayer.RemoveAt(AllGeneteratedPlayer.Count - 1);
             AllGeneteratedPlayer.Remove(this.gameObject);
+            RemoveGameObjectByName(this.gameObject.name);
             StartCoroutine(CleanUpMissingObjects());
             explosion.SetActive(true);
             
         }
     }
+    private void LateUpdate()
+    {
+        for(int i = 0; i < parent.transform.childCount; i++)
+        {
+            for (int j = 0; j < parent.transform.childCount; j++)
+            {
+                //parent.transform.GetChild(i).GetComponent<PlayerLogic>().AllGeneteratedPlayer.Add(parent.transform.GetChild(j).transform.gameObject);
+                GameObject childObject = parent.transform.GetChild(j).gameObject;
 
+                // Check if the child is not already in the list
+                if (!AllGeneteratedPlayer.Contains(childObject))
+                {
+                    AllGeneteratedPlayer.Add(childObject);
+                }
+            }
+        }
+        StartCoroutine(CleanUpMissingObjects());
+    }
     public void SpawnFollowingPlayer()
     {
         Debug.Log("ifff = " + parent.transform.childCount);
-        AllGeneteratedPlayer.Clear();
-        for (int i = 0; i < parent.transform.childCount; i++)
-        {
-            Debug.Log("For");
-            AllGeneteratedPlayer.Add(parent.transform.GetChild(i).gameObject);
-        }
+        
+
         if (AllGeneteratedPlayer.Count < 3)
         {
             Debug.Log("Count = "+AllGeneteratedPlayer.Count);
             Debug.Log("Pos = " +AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position);   
             Vector3 spawnPosition = AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position - new Vector3(-1.5f, 0f, 0f);
             GameObject newPlayer = Instantiate(PlayerPref, spawnPosition, Quaternion.identity,parent.transform);
+            newPlayer.name = count.ToString();
+            count++;
+            Debug.Log("Count = "+count);
             AllGeneteratedPlayer.Add(newPlayer);
+           
             Debug.Log("Player added");
         }
     }
+    static int count;
+    public void RemoveGameObjectByName(string objectName)
+    {
+        for (int i = AllGeneteratedPlayer.Count - 1; i >= 0; i--)
+        {
+            if (AllGeneteratedPlayer[i].name == objectName)
+            {
+                Destroy(AllGeneteratedPlayer[i]); // Destroy the GameObject
+                AllGeneteratedPlayer.RemoveAt(i); // Remove it from the list
+            }
+        }
+    }
+
 }
