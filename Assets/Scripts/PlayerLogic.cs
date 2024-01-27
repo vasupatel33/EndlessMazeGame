@@ -300,8 +300,7 @@ public class PlayerLogic : MonoBehaviour
     {
         Debug.Log("ifff = " + parent.transform.childCount);
         
-
-        if (AllGeneteratedPlayer.Count < 3)
+        if (AllGeneteratedPlayer.Count < 5)
         {
             Debug.Log("Count = "+AllGeneteratedPlayer.Count);
             Debug.Log("Pos = " +AllGeneteratedPlayer[AllGeneteratedPlayer.Count - 1].transform.position);   
@@ -311,8 +310,6 @@ public class PlayerLogic : MonoBehaviour
             count++;
             Debug.Log("Count = "+count);
             AllGeneteratedPlayer.Add(newPlayer);
-           
-            Debug.Log("Player added");
         }
     }
     static int count;
